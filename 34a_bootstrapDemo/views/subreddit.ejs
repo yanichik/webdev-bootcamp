@@ -1,0 +1,26 @@
+<html lang="en">
+
+<%- include('partials/header') %>
+
+<body>
+	<%- include('partials/navbar')%>
+
+	<div class="container">
+		<h1>You are viewing the "<%= name %>" subreddit!</h1>
+		<h2><%= description %></h2>
+		<p><%= subscribers.toLocaleString() %> subscribers</p>
+
+
+		<% for (let [i, post] of posts.entries()) { %>
+			<article>
+				<p><%= i+1 %>. "<%= post.title %>" &emsp;&emsp;-<b><%= post.author %></b></p>
+				<% if(post.img){ %>
+					<img src="<%=post.img%>" alt="">
+				<% } %>
+				<% i++ %>
+			</article>
+		<% } %>
+	</div>
+
+</body>
+</html>

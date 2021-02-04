@@ -1,0 +1,46 @@
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Ping Pong</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+	<link rel="stylesheet" href="266_score_kpr.css" type="text/css">
+</head>
+<body>
+	<!-- <div class="container"> -->
+		<div class="columns">
+			<div class="column is-3 is-offset-5">
+				<div class="card">
+				  <header class="card-header">
+				    <p class="card-header-title">
+				      Ping Pong Score Keeper
+				    </p>
+				  </header>
+				  <div class="card-content">
+				    <div class="content">
+				    	<h1 class="title is-1"><span id="p1Display">0</span> to <span id="p2Display">0</span></h1>
+				    	<p class="subtitle">Use Buttons Below to Keep Score</p>
+				    	<label for="playto" class="label is-large is-inline">Playing To:</label>
+				    	<div class="select is-rounded">
+				    		<select name="" id="playto">
+				    			<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+				    		</select>
+				    	</div>
+				    </div>
+				  </div>
+				  <footer class="card-footer">
+				  	<button class="button is-primary is-large card-footer-item" id="p1Button">+1 Player One</button>
+				  	<button class="button is-primary is-large card-footer-item" id="p2Button">+1 Player Two</button>
+				  	<button class="button is-danger  is-large card-footer-item" id="reset">Reset</button>
+				  </footer>
+				</div>
+			</div>
+		</div>
+	<!-- </div> -->
+	<script src="266_score_kpr.js"></script>
+</body> 
+</html>

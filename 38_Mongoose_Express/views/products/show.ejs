@@ -9,7 +9,8 @@
 	<h2><%= product.name %></h2>
 	<ul>
 		<li>Price:&emsp;$<%= product.price%></li>
-		<li>Category:&emsp;<%= product.category%></li>
+		<!-- <li>Category:&emsp;<%= product.category%></li> -->
+		<li>Category:&emsp;<a href="/products?category=<%= product.category%>"><%= product.category%></a></li>
 	</ul>
 	<a href="/products">Return to All Products</a>
 	<a href="/products/<%= product._id%>/edit">Edit Product</a>

@@ -40,6 +40,12 @@ app.post('/products', async (req, res) =>{
 	res.redirect(`/products/${newProduct._id}`);
 });
 
+app.delete('/products/:id', async (req, res) =>{
+	const {id} = req.params;
+	const deletedProduct = await Product.findByIdAndDelete(id);
+	res.redirect('/products');
+})
+
 app.get('/products/:id', async (req, res) =>{
 	const {id} = req.params;
 	const product = await Product.findById(id);

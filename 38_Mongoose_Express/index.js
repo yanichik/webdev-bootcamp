@@ -15,6 +15,8 @@ mongoose.connect('mongodb://localhost:27017/myShuk', {useNewUrlParser: true, use
 		console.log('Something happened. See here:\n' + err);
 	})
 
+const categories = ['fruit', 'vegetable', 'dairy', 'baked goods'];
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({extended: true}));
@@ -26,23 +28,27 @@ app.get('/products', async (req, res) =>{
 });
 
 app.get('/products/new', async (req, res) =>{
-	res.render('products/new');
+	const product = req.body;
+	res.render('products/new', {categories, product});
 });
 
-app.post('/products', (req, res) =>{
-	console.log(req.body);
-	res.send('making product');
+app.post('/products', async (req, res) =>{
+	// console.log(req.body);
+	// res.send('making product');
+	const newProduct = new Product(req.body);
+	await newProduct.save();
+	res.redirect(`/products/${newProduct._id}`);
 });
 
 app.get('/products/:id', async (req, res) =>{
 	const {id} = req.params;
 	const product = await Product.findById(id);
-	res.render('products/show', {product});
+	res.render('products/show', {product, categories});
 });
 app.get('/products/:id/edit', async (req, res) =>{
 	const {id} = req.params;
 	const product = await Product.findById(id);
-	res.render('products/edit', {product});
+	res.render('products/edit', {product, categories});
 });
 app.put('/products/:id', async (req, res) => {
 	const {id} = req.params;

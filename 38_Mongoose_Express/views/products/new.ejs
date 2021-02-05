@@ -9,14 +9,14 @@
 	<h2>Add New Product</h2>
 	<form action="/products" method="POST">
 		<label for="name">Product Name</label>
-		<input type="text" id="name" name="newProduct" placeholder="Product Name" required="true" minlength="2" style="max-width:5%">
+		<input type="text" id="name" name="name" placeholder="Product Name" required="true" minlength="2" style="max-width:5%">
 		<label for="price">Price ($)</label>
 		<input type="text" id="price" name="price" placeholder="USD" required="true" minlength="1" size="5">
 		<label for="category">Category</label>
 		<select name="category" id="category" style="max-width:5%">
-			<option value="fruit">fruit</option>
-			<option value="vegetable">vegetable</option>
-			<option value="dairy">dairy</option>
+			<% for(let category of categories){%>
+				<option value="<%=category%>" <%=product.category === category ? 'selected': ''%>> <%=category%></option>
+			<%}%>
 		</select>
 		<button>Submit</button>
 	</form>

@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Edit <%= campground.title %></title>
-</head>
-<body>
+<!-- don't need path relative to this file because the layout acts relative to the views folder, 
+	 which is the default for 'ejs' -->
+<% layout('layouts/boilerplate') %>
 	<h1>Edit "<%= campground.title %>"</h1>
 	<form action="/campgrounds/<%= campground._id %>?_method=PUT" method="POST">
 		<div>
@@ -19,5 +14,3 @@
 		<button>Update</button>
 	</form>
 	<a href="/campgrounds/<%= campground._id %>">Cancel Edit</a>
-</body>
-</html>

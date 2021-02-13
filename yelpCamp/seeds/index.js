@@ -1,3 +1,5 @@
+const express = require('express');
+const app = express();
 const mongoose = require('mongoose');
 const cities = require('./cities');
 const seedHelpers = require('./seedHelpers');
@@ -18,13 +20,17 @@ db.once('open', ()=> {
 
 const randomX = array => Math.floor(Math.random() * array.length);
 
-const seedDB = async ()=>{
+const seedDB =  async () =>{
 	await Campground.deleteMany({});
-	for (var i = 0; i < 50; i++) {
+	for (let i = 0; i < 50; i++) {
 		const random1000 = Math.floor(Math.random() * 1000);
+		const price = Math.floor(Math.random() * 30) + 5;
 		const camp = new Campground({
 			location: `${cities[random1000].city}, ${cities[random1000].state}`,
-			title: `${descriptors[randomX(descriptors)]} ${places[randomX(places)]}`
+			title: `${descriptors[randomX(descriptors)]} ${places[randomX(places)]}`,
+			image: 'http://source.unsplash.com/collection/429524',
+			description: "Lorem ipsum, dolor sit amet consectetur adipisicing, elit. Cumque, nostrum.",
+			price
 		});
 		await camp.save();
 	}

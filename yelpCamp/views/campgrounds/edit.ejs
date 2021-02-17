@@ -1,16 +1,36 @@
 <!-- don't need path relative to this file because the layout acts relative to the views folder, 
 	 which is the default for 'ejs' -->
 <% layout('layouts/boilerplate') %>
-	<h1>Edit "<%= campground.title %>"</h1>
-	<form action="/campgrounds/<%= campground._id %>?_method=PUT" method="POST">
-		<div>
-			<label for="title">Campground Name:</label>
-			<input type="text" id="title" name="title" value="<%= campground.title %>">
+	<div class="row">
+		<h1 class="text-center">Edit Campground</h1>
+		<div class="col-6  offset-3">
+			<form action="/campgrounds/<%= campground._id %>?_method=PUT" method="POST">
+				<div class="mb-3">
+					<label class="form-label" for="title">Campground Name:</label>
+					<input class="form-control" type="text" id="title" name="title" value="<%= campground.title %>">
+				</div>
+				<!-- <div class="mb-3" style="border-color: blue; border-style: solid;"> -->
+				<div class="mb-3">
+					<label class="form-label" for="location">Campground Location:</label>
+					<input class="form-control" type="text" id="location" name="location" value="<%= campground.location %>">
+				</div>
+				<div class="mb-3">
+					<label class="form-label" for="description">Campground Description:</label>
+					<textarea class="form-control" type="text" id="description" name="description"><%= campground.description %></textarea>
+				</div>
+				<div class="mb-3">
+					<label class="form-label" for="price">Campground Price:</label>
+					<div class="input-group mb-3">
+						<span class="input-group-text" id="price-label">$</span>
+						<input class="form-control" type="text" id="price" name="price" aria-label="price" value="<%= campground.price %>">
+					</div>
+				</div>
+				<div class="mb-3">
+					<label class="form-label" for="image">Image URL:</label>
+					<input class="form-control" type="text" id="image" name="image" value="<%= campground.image %>">
+				</div>
+				<button class="btn btn-primary">Update</button>
+				<a class="btn btn-danger" href="/campgrounds/<%= campground._id %>">Cancel Edit</a>
+			</form>
 		</div>
-		<div>
-			<label for="location">Campground Location:</label>
-			<input type="text" id="location" name="location" value="<%= campground.location %>">
-		</div>
-		<button>Update</button>
-	</form>
-	<a href="/campgrounds/<%= campground._id %>">Cancel Edit</a>
+	</div>

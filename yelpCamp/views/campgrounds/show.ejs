@@ -1,14 +1,37 @@
 <% layout('layouts/boilerplate') %>
-	<h1><%= campground.title %></h1>
-	<h2><%= campground.location %></h2>
-	<img src="<%= campground.image %>" alt="">
-	<p><%= campground.description %></p>
-	<div>
-		<a href="/campgrounds/<%= campground._id %>/edit">Edit Campground</a>
-		<form action="/campgrounds/<%=campground._id%>?_method=DELETE" method=POST>
-			<button>Delete</button>
-		</form>
+<div class="row">
+	<div class="col-6 offset-3">
+		<div class="card">
+		  <img src="<%= campground.image %>" class="card-img-top" alt="" style="max-height: 500px; max-width: 100%; object-fit: scale-down;">
+		  <div class="card-body">
+		    <h5 class="card-title"><%= campground.title %></h5>
+		    <p class="card-text text-muted"><%= campground.location %></p>
+		  </div>
+		  <ul class="list-group list-group-flush">
+		    <li class="list-group-item"><%= campground.description %></li>
+		    <li class="list-group-item">$<%= campground.price %>/night</li>
+		  </ul>
+		  <div class="card-body d-flex d-row" style="justify-content: flex-start;">
+		    <a href="/campgrounds/<%= campground._id %>/edit" class="card-link btn btn-primary">Edit</a>
+			<a href="/campgrounds" class="card-link btn btn-info">Back to All</a>
+			<form class="d-inline" action="/campgrounds/<%=campground._id%>?_method=DELETE" method=POST>
+				<button class="btn btn-danger" style="margin-left: 15px;">Delete</button>
+			</form>
+		  </div>
+		</div>
 	</div>
-	<div>
-		<a href="/campgrounds">Back to All</a>
-	</div>
+</div>
+<!-- 
+	<div class="card text-center col-6 offset-3" style="border: none;">
+		<h1><%= campground.title %></h1>
+		<h2><%= campground.location %></h2>
+		<div class="mb-3">
+			<img src="<%= campground.image %>" class="mb-3" style="max-height: 500px; max-width: 100%" alt="">
+			<p class="mb-3" style="max-width: 100%"><%= campground.description %></p>
+			<a class="mb-3" href="/campgrounds/<%= campground._id %>/edit">Edit Campground</a>
+			<form class="mb-3" action="/campgrounds/<%=campground._id%>?_method=DELETE" method=POST>
+				<button>Delete</button>
+			</form>
+			<a class="mb-3" href="/campgrounds">Back to All</a>
+		</div>
+	</div> -->

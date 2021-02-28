@@ -4,20 +4,20 @@
 		<h1 class="text-center">Create New Campground</h1>
 		<!-- <div class="col-6  offset-3" style="border-color: green; border-style: solid;"> -->
 		<div class="col-6  offset-3">
-			<form action="/campgrounds" method="POST">
+			<form action="/campgrounds" method="POST" novalidate class="needs-validation">
 				<!-- <div class="mb-3" style="border-color: blue; border-style: solid;"> -->
 				<div class="mb-3">
 					<label class="form-label" for="title">Campground Name:</label>
-					<input class="form-control" type="text" id="title" name="title">
+					<input class="form-control" type="text" id="title" name="title" required>
 				</div>
 				<!-- <div class="mb-3" style="border-color: blue; border-style: solid;"> -->
 				<div class="mb-3">
 					<label class="form-label" for="location">Campground Location:</label>
-					<input class="form-control" type="text" id="location" name="location">
+					<input class="form-control" type="text" id="location" name="location" required>
 				</div>
 				<div class="mb-3">
 					<label class="form-label" for="description">Campground Description:</label>
-					<textarea class="form-control" type="text" id="description" name="description"> </textarea>
+					<textarea class="form-control" type="text" id="description" name="description" required> </textarea>
 				</div>
 				<div class="mb-3">
 					<label class="form-label" for="price">Campground Price:</label>
@@ -27,14 +27,19 @@
 					</div> -->
 					<div class="input-group mb-3">
 						<span class="input-group-text" id="price-label">$</span>
-						<input class="form-control" type="text" id="price" name="price" aria-label="price">
+						<input class="form-control" type="text" id="price" name="price" aria-label="price" required>
 					</div>
 				</div>
 				<div class="mb-3">
 					<label class="form-label" for="image">Image URL:</label>
-					<input class="form-control" type="text" id="image" name="image">
+					<input class="form-control" type="text" id="image" name="image" required>
 				</div>
 				<button class="btn btn-primary">Submit</button>
+				<a class="btn btn-danger" href="/campgrounds">Cancel</a>
 			</form>
 		</div>
 	</div>
+
+	<script type="text/javascript">
+		<%- include('../../utils/formValidation.js') %>
+	</script>

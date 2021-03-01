@@ -9,6 +9,7 @@ const ejsMate = require('ejs-mate');
 const ExpressError = require('./utils/ExpressError');
 const catchAsync = require('./utils/catchAsync');
 const dataCheck = require('./utils/dataCheck');
+const Joi = require('joi');
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {
 	useNewUrlParser: true,
@@ -46,17 +47,20 @@ app.get('/campgrounds/new', (req, res) => {
 })
 
 app.post('/campgrounds', catchAsync(async (req, res, next) => {
-	// const {title, price, location, descr, url} = req.body;
 	dataCheck(req.body);
 	// if (!req.body.title){
 	// 	throw new ExpressError("Need to include campground title. Try again.", 400);
 	// }
-	// if (!req.body.location){
-	// 	throw new ExpressError("Need to include campground location. Try again.", 400);
-	// }
-	// if (!req.body.price){
-	// 	throw new ExpressError("Need to include campground price. Try again.", 400);
-	// }
+
+	// const campgroundSchema = Joi.object({
+	// 	title: Joi.string().required(),
+	// 	price: Joi.number().min(0).required(),
+	// 	location: Joi.string().required(),
+	// 	description: Joi.string().min(2).max(30).required(),
+	// 	url: Joi.string().uri().required()
+	// })
+	// const {error} = campgroundSchema.validate(req.body);
+	// console.log(typeof(error.details));
 	const campground = new Campground(req.body);
 	await campground.save();
 	res.redirect(`campgrounds/${campground._id}`);
@@ -88,7 +92,8 @@ app.delete('/campgrounds/:id', async (req, res) => {
 
 app.use((err, req, res, next) => {
 	const {message = "Something went wrong. Go back and try again.", statusCode = 500 } = err;
-	res.status(statusCode).send(message);
+	// res.status(statusCode).send(message);
+	res.status(statusCode).render('error', {err});
 })
 
 app.listen(3000, () => {

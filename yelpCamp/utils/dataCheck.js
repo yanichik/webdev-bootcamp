@@ -1,5 +1,7 @@
+// dataCheck customizes responses depending on the missing data from the client
+
 const ExpressError = require('./ExpressError');
-const parameters = ['title', 'price', 'location', 'description', 'url'];
+const parameters = ['title', 'price', 'location', 'description', 'image'];
 module.exports = (request) => {
 	for (param of parameters){
 		// console.log(request.param);

@@ -10,12 +10,22 @@ const ExpressError = require('./utils/ExpressError');
 const catchAsync = require('./utils/catchAsync');
 const dataCheck = require('./utils/dataCheck');
 const Joi = require('joi');
+const {campgroundSchema} = require('./schemas');
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
 	useCreateIndex: true
 })
+
+const validateCampground = (req, res, next) => {
+	const {error} = campgroundSchema.validate(req.body);
+	if (error) {
+		const msg = error.details.map(item => item.message).join(',');
+		throw new ExpressError(msg, 400);
+	}
+	next();
+}
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -46,21 +56,15 @@ app.get('/campgrounds/new', (req, res) => {
 	res.render('campgrounds/new');
 })
 
-app.post('/campgrounds', catchAsync(async (req, res, next) => {
-	dataCheck(req.body);
-	// if (!req.body.title){
-	// 	throw new ExpressError("Need to include campground title. Try again.", 400);
-	// }
+app.post('/campgrounds', validateCampground, catchAsync(async (req, res, next) => {
+	// Server-side validation OPTION 1: dataCheck.js - self-made
+	// dataCheck customizes responses depending on the missing data from the client
+	
+	// dataCheck(req.body);
 
-	// const campgroundSchema = Joi.object({
-	// 	title: Joi.string().required(),
-	// 	price: Joi.number().min(0).required(),
-	// 	location: Joi.string().required(),
-	// 	description: Joi.string().min(2).max(30).required(),
-	// 	url: Joi.string().uri().required()
-	// })
-	// const {error} = campgroundSchema.validate(req.body);
-	// console.log(typeof(error.details));
+	// Server-side validation OPTION 2: Joi API - via NPM
+	// see middleware inside the app.post call above (2nd parameter is the error middleware)
+
 	const campground = new Campground(req.body);
 	await campground.save();
 	res.redirect(`campgrounds/${campground._id}`);
@@ -76,7 +80,7 @@ app.get('/campgrounds/:id/edit', async (req, res) => {
 	res.render('campgrounds/edit', {campground});
 })
 
-app.put('/campgrounds/:id', async (req, res) => {
+app.put('/campgrounds/:id', validateCampground, async (req, res) => {
 	const {id} = req.params;
 	// const {title, location} = req.body;
 	// const campground = await Campground.findByIdAndUpdate(id, {title: title, location: location}, {new: true});

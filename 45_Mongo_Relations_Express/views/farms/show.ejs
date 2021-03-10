@@ -19,5 +19,8 @@
 	<a href="/farms/<%= farm._id%>/edit">Edit Farm</a>
 	<a href="/farms/<%= farm._id%>/newFarmProduct">Add Farm Product</a>
 	<a href="/farms">Return to All Farms</a>
+	<form action="/farms/<%=farm._id%>?_method=DELETE" method="POST">
+		<button>Delete</button>
+	</form>
 </body>
 </html>

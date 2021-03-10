@@ -81,6 +81,13 @@ app.get('/farms/:id/newFarmProduct', async (req, res) =>{
 	res.render('farms/newFarmProduct', {farm, categories});
 });
 
+app.delete('/farms/:id', async (req, res) =>{
+	const {id} = req.params;
+	const deletedFarm = await Farm.findByIdAndDelete(id);
+	// console.log('Deleting')
+	res.redirect('/farms');
+})
+
 // PRODUCT ROUTES
 
 app.get('/products', async (req, res) =>{

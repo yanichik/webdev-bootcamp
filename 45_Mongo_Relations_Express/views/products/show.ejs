@@ -13,7 +13,7 @@
 		<% if(farm._id !== 'NA'){ %>
 			<li>Farm:&emsp;<a href="/farms/<%= farm._id %>"><%= farm.name %></a></li>
 		<% } else { %>
-			<% console.log('Inside Else') %>
+			<% console.log('Inside Else - show.ejs @ products') %>
 			<li>Farm:&emsp;<a href="/farms"><%= product.FarmUnassigned %></a></li>
 		<% } %>
 	</ul>

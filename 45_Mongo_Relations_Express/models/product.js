@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Farm = require('./farm');
+// const Farm = require('./farm');
 
 const Schema = mongoose.Schema;
 
@@ -22,8 +22,6 @@ const productSchema = new Schema({
 	farm: {
 		type: Schema.Types.ObjectId,
 		ref: 'Farm'
-		// required: true
-
 	}
 })
 const Product = mongoose.model('Product', productSchema);

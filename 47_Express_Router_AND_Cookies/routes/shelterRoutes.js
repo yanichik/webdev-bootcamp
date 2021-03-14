@@ -1,23 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
-router.use((req, res, next) => {
-	if (req.query.isAdmin) {
-		next();
-	}
-	res.send("Not an admin.");
-})
-
 router.get('/', (req, res) => {
-	res.send('All Dogs');
+	res.send('All Shelters');
 })
 
 router.get('/:id', (req, res) => {
-	res.send(`Dog ID: ${req.params.id}`);
+	res.send(`Shelter ID: ${req.params.id}`);
 })
 
 router.get('/:id/edit', (req, res) => {
-	res.send(`Editing: ${req.params.id} Dog`);
+	res.send(`Editing: ${req.params.id} Shelter`);
 })
 
 module.exports = router;

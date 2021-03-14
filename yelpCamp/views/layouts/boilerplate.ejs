@@ -11,9 +11,35 @@
 	<main class="container" style="margin-top: 2em">
 		<%- body %>
 	</main>
+	<%- include('../partials/footer') %> <!-- relative path -->
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js" integrity="sha384-KsvD1yqQ1/1+IA7gi3P0tyJcT3vR+NdBTt13hSJ2lnve8agRGXTTyNaBYmCR/Nwi" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js" integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG" crossorigin="anonymous"></script>
 
-	<%- include('../partials/footer') %> <!-- relative path -->
+	<script>
+		// JavaScript for disabling form submissions if there are invalid fields. This function is included
+		// in the 'new.ejs' and 'edit.ejs' views
+		(function () {
+		'use strict'
+
+		// Fetch all the forms we want to apply custom Bootstrap validation styles to
+		const forms = document.querySelectorAll('.needs-validation')
+		console.log(forms);
+
+		// Loop over them and prevent submission
+		// Array.prototype.slice.call(forms) -> old way of making an array out of an array-like item
+		Array.from(forms) // -> new way of making array out of array-like item
+		.forEach(function (form) {
+		  form.addEventListener('submit', function (event) {
+		    if (!form.checkValidity()) {
+		      event.preventDefault()
+		      event.stopPropagation()
+		    }
+
+		    form.classList.add('was-validated')
+		  }, false)
+		})
+		})()
+	</script>
+
 </body>
 </html>

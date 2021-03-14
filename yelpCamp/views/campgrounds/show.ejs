@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate') %>
 <div class="row">
-	<div class="col-6 offset-3">
+	<div class="col-6">
 		<div class="card">
 		  <img src="<%= campground.image %>" class="card-img-top" alt="" style="max-height: 500px; max-width: 100%; object-fit: scale-down;">
 		  <div class="card-body">
@@ -18,9 +18,42 @@
 				<button class="btn btn-danger" style="margin-left: 16px;">Delete</button>
 			</form>
 		  </div>
+		</div>	
+	</div>
+	<div class="col-6">
+		<h2>Leave a Review</h2>
+		<form action="/campgrounds/<%=campground._id%>/reviews?_method=PUT" method=POST novalidate class="needs-validation">
+			<!-- <label class="form-label" for="rating"></label> -->
+			<div class="mt-5">
+				<label class="form-label" for="rating">Rate Me:</label>
+				<input type="range" id="rating" min="1" value="5" max="5" name="reviews[rating]" oninput="this.nextElementSibling.value = this.value">
+				<output>5</output>
+			</div>
+			<div style="margin-top: -25px;">
+				<label class="form-label" for="text"></label>
+				<textarea class="form-control" id="text" name="reviews[text]" required></textarea>
+				<div class="valid-feedback">
+					Great!
+				</div>
+				<button class="btn btn-success mt-2 mb-5">Submit</button>
+			</div>
+		</form>
+		<% for(let review of campground.reviews) {%>
+		<div class="card mb-2">
+			<div class="card-text">
+				<h5>Rating: <%= review.rating %></h5>
+				<p>Review: <%= review.text %></p>
+			</div>
 		</div>
+		<% } %>
 	</div>
 </div>
+
+
+
+
+
+<!-- OLD STYLE -->
 <!-- 
 	<div class="card text-center col-6 offset-3" style="border: none;">
 		<h1><%= campground.title %></h1>

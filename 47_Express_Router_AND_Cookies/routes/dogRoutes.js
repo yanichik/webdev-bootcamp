@@ -9,6 +9,8 @@ router.use((req, res, next) => {
 })
 
 router.get('/', (req, res) => {
+	res.cookie('dog1', 'mike');
+	res.cookie('dog2', 'charlie');
 	res.send('All Dogs');
 })
 

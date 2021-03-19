@@ -28,6 +28,12 @@ app.use(methodOverride('_method'));
 app.use(session(sessionOptions));
 app.use(flash());
 
+// flash message middleware
+app.use((req, res, next) => {
+	res.locals.messages = req.flash('congratsNewProdSuccess');
+	next();
+})
+
 // FARM ROUTES
 
 app.get('/farms', async (req, res) =>{
@@ -49,7 +55,7 @@ app.post('/farms', async (req, res) =>{
 app.get('/farms/:id', async (req, res) =>{
 	const {id} = req.params;
 	const farm = await Farm.findById(id).populate('products');
-	res.render('farms/show', {farm, messages: req.flash('congratsNewProdSuccess')});
+	res.render('farms/show', {farm});
 });
 
 app.post('/farms/:id', async (req, res) =>{
@@ -108,8 +114,7 @@ app.get('/products', async (req, res) =>{
 });
 
 app.get('/products/new', async (req, res) =>{
-	req.flash('addNewProd', 'You can add new product here:')
-	res.render('products/new', {categories, messages: req.flash('addNewProd')});
+	res.render('products/new', {categories});
 });
 
 app.post('/products', async (req, res) =>{
@@ -130,14 +135,14 @@ app.get('/products/:id', async (req, res) =>{
 	try{
 		const product = await Product.findById(id).populate('farm');
 		const farm = await Farm.findById(product.farm._id);
-		res.render('products/show', {product, categories, farm, messages: req.flash('congratsNewProdSuccess')});
+		res.render('products/show', {product, categories, farm});
 	}
 	catch{
 		const product = await Product.findById(id)
 		product.FarmUnassigned = 'Unassigned. Back to Farms.'
 		await product.save();
 		const farm = {'name': product.farm, '_id': 'NA'}
-		res.render('products/show', {product, categories, farm, messages: req.flash('congratsNewProdSuccess')});
+		res.render('products/show', {product, categories, farm});
 	}
 });
 

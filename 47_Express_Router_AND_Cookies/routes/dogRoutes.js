@@ -1,15 +1,18 @@
 const express = require('express');
 const router = express.Router();
+const cookieParser = require('cookie-parser');
 
-router.use((req, res, next) => {
-	if (req.query.isAdmin) {
-		next();
-	}
-	res.send("Not an admin.");
-})
+// router.use((req, res, next) => {
+// 	if (req.query.isAdmin) {
+// 		next();
+// 	}
+// 	res.send("Not an admin.");
+// })
+
+router.use(cookieParser('dogSecret'));
 
 router.get('/', (req, res) => {
-	res.cookie('dog1', 'mike');
+	res.cookie('dog1', 'mike', {signed: true});
 	res.cookie('dog2', 'charlie');
 	res.send('All Dogs');
 })

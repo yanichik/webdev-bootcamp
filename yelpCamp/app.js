@@ -12,29 +12,17 @@ const catchAsync = require('./utils/catchAsync');
 const dataCheck = require('./utils/dataCheck');
 const Joi = require('joi');
 const {campgroundSchema, reviewSchema} = require('./schemas');
+const campgroundsRoutes = require('./routes/campgrounds');
+const reviewsRoutes = require('./routes/reviews');
+
+
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
-	useCreateIndex: true
+	useCreateIndex: true,
+	useFindAndModify: false
 })
-
-const validateCampground = (req, res, next) => {
-	const {error} = campgroundSchema.validate(req.body);
-	if (error) {
-		const msg = error.details.map(item => item.message).join(',');
-		throw new ExpressError(msg, 400);
-	}
-	next();
-}
-const validateReview = (req, res, next) => {
-	const {error} = reviewSchema.validate(req.body);
-	if (error) {
-		const msg = error.details.map(item => item.message).join(',');
-		throw new ExpressError(msg, 400);
-	}
-	next();
-}
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -51,66 +39,13 @@ app.use(express.urlencoded({extended: true}));
 // override with POST having ?_method=DELETE or ?_method=PUT
 app.use(methodOverride('_method'));
 
+// routes middleware: location MUST BE AFTER all of the other required middleware for the routes to function
+app.use('/campgrounds', campgroundsRoutes)
+app.use('/campgrounds/:id/reviews', reviewsRoutes)
+
 app.get('/', (req, res) => {
 	// res.send('Go YelpCamp!');
 	res.render('home');
-})
-
-app.get('/campgrounds', catchAsync(async (req, res, next) => {
-	const campgrounds = await Campground.find({});
-	res.render('campgrounds/index', {campgrounds});
-}))
-
-app.get('/campgrounds/new', (req, res) => {
-	res.render('campgrounds/new');
-})
-
-app.post('/campgrounds', validateCampground, catchAsync(async (req, res, next) => {
-	// Server-side validation OPTION 1: dataCheck.js - self-made
-	// dataCheck customizes responses depending on the missing data from the client
-	
-	// dataCheck(req.body);
-
-	// Server-side validation OPTION 2: Joi API - via NPM
-	// see middleware inside the app.post call above (2nd parameter is the error middleware)
-
-	const campground = new Campground(req.body);
-	await campground.save();
-	res.redirect(`campgrounds/${campground._id}`);
-}))
-
-app.get('/campgrounds/:id', catchAsync( async (req, res) => {
-	const campground = await Campground.findById(req.params.id).populate('reviews');
-	res.render('campgrounds/show', {campground});
-}))
-
-app.put('/campgrounds/:id/reviews', validateReview, catchAsync( async(req, res, next) => {
-	const review = new Review(req.body.reviews)
-	await review.save();
-	const campground = await Campground.findById(req.params.id);
-	campground.reviews.push(review);
-	await campground.save();
-	res.redirect(`/campgrounds/${req.params.id}`);
-}))
-
-app.get('/campgrounds/:id/edit', async (req, res) => {
-	const campground = await Campground.findById(req.params.id);
-	res.render('campgrounds/edit', {campground});
-})
-
-app.put('/campgrounds/:id', validateCampground, async (req, res) => {
-	const {id} = req.params;
-	console.log(req.body);
-	// const {title, location} = req.body;
-	// const campground = await Campground.findByIdAndUpdate(id, {title: title, location: location}, {new: true});
-	const campground = await Campground.findByIdAndUpdate(id, req.body, {new: true});
-	res.redirect(`/campgrounds/${id}`);
-})
-
-app.delete('/campgrounds/:id', async (req, res) => {
-	const {id} = req.params;
-	await Campground.findByIdAndDelete(id);
-	res.redirect(`/campgrounds`);
 })
 
 app.use((err, req, res, next) => {

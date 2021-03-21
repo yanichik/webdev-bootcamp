@@ -14,8 +14,8 @@ const Joi = require('joi');
 const {campgroundSchema, reviewSchema} = require('./schemas');
 const campgroundsRoutes = require('./routes/campgrounds');
 const reviewsRoutes = require('./routes/reviews');
-
-
+const session = require('express-session');
+const flash = require('connect-flash');
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {
 	useNewUrlParser: true,
@@ -34,10 +34,29 @@ app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+const sessionConfig = {
+	secret: 'notsomesecret',
+	resave: false,
+	saveUninitialized: true,
+	cookie: {
+		httpOnly: true,
+		expires: Date.now() + 1000 * 3600 * 24 * 7,
+		maxAge: 1000 * 3600 * 24 * 7
+	}
+}
+app.use(session(sessionConfig));
+app.use(flash());
+app.use( (req, res, next) => {
+	res.locals.success = req.flash('success');
+	res.locals.error = req.flash('error');
+	next();
+})
+
 // app.use(morgan(':method :url :status :response-time ms'));
 app.use(express.urlencoded({extended: true}));
 // override with POST having ?_method=DELETE or ?_method=PUT
 app.use(methodOverride('_method'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // routes middleware: location MUST BE AFTER all of the other required middleware for the routes to function
 app.use('/campgrounds', campgroundsRoutes)

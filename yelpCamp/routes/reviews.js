@@ -26,6 +26,7 @@ router.put('', validateReview, catchAsync( async(req, res, next) => {
 	const campground = await Campground.findById(req.params.id);
 	campground.reviews.push(review);
 	await campground.save();
+	req.flash('success', 'Thanks for reviewing us!');
 	res.redirect(`/campgrounds/${req.params.id}`);
 }))
 

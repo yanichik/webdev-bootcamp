@@ -20,7 +20,7 @@ app.get('/viewcounts', function(req, res, next) {
     res.end()
   } else {
     req.session.views = 1
-    res.end('welcome to the session demo. refresh!')
+    res.end('welcome to the session demo.')
   }
 })
 

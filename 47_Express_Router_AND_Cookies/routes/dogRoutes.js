@@ -12,8 +12,8 @@ const cookieParser = require('cookie-parser');
 router.use(cookieParser('dogSecret'));
 
 router.get('/', (req, res) => {
-	res.cookie('dog1', 'mike', {signed: true});
-	res.cookie('dog2', 'charlie');
+	// res.cookie('dog1', 'mike', {signed: true});
+	// res.cookie('dog2', 'charlie');
 	res.send('All Dogs');
 })
 

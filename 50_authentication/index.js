@@ -23,6 +23,13 @@ mongoose.connect('mongodb://localhost:27017/authLogin', {useNewUrlParser: true, 
 		console.log('Something happened. See here:\n' + err);
 	})
 
+const requireLogin = (req, res, next) => {
+	if (!req.session.user_id) {
+		return res.redirect('/login');
+	}
+	else next();
+}
+
 app.get('/register', (req, res) =>{
 	res.render('register');
 })
@@ -66,16 +73,18 @@ app.post('/login', async (req, res) => {
 	}
 })
 
-app.get('/secret', (req, res) =>{
-	if (!req.session.user_id) {
-		res.redirect('/login');
-	}
-	else {
-		// res.send('Mother of all secrets!' + "; " + req.session.user_id);
+app.get('/secret', requireLogin, (req, res) =>{
 		res.render('secret');
-	}
+})
+
+app.get('/topsecret', requireLogin, (req, res) =>{
+		res.send('Top Secret');
 })
 
 app.listen(3000, ()=>{
 	console.log("App running on port 3000!")
 })
+
+
+
+

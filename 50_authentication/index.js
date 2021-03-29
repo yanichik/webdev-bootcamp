@@ -45,14 +45,12 @@ app.post('/logout', (req, res) =>{
 
 app.post('/register', async (req, res) => {
 	const {username, password} = req.body;
-	const hashedPw = await bcrypt.hash(password, 12);
-	const newUser = new User({
-		username,
-		hashedPw
-	})
+	// const hashedPw = await bcrypt.hash(password, 12);
+	const newUser = new User({username, hashedPw: password});
 	await newUser.save();
 	req.session.user_id = newUser._id;
-	res.send(newUser);
+	// res.send(newUser);
+	res.redirect('/secret');
 })
 
 app.post('/login', async (req, res) => {

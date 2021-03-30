@@ -12,10 +12,15 @@ const catchAsync = require('./utils/catchAsync');
 const dataCheck = require('./utils/dataCheck');
 const Joi = require('joi');
 const {campgroundSchema, reviewSchema} = require('./schemas');
+const usersRoutes = require('./routes/users');
 const campgroundsRoutes = require('./routes/campgrounds');
 const reviewsRoutes = require('./routes/reviews');
 const session = require('express-session');
 const flash = require('connect-flash');
+const passport = require('passport');
+const localStrategy = require('passport-local');
+const User = require('./models/user');
+
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {
 	useNewUrlParser: true,
@@ -52,6 +57,12 @@ app.use( (req, res, next) => {
 	next();
 })
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new localStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 // app.use(morgan(':method :url :status :response-time ms'));
 app.use(express.urlencoded({extended: true}));
 // override with POST having ?_method=DELETE or ?_method=PUT
@@ -59,8 +70,15 @@ app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // routes middleware: location MUST BE AFTER all of the other required middleware for the routes to function
-app.use('/campgrounds', campgroundsRoutes)
-app.use('/campgrounds/:id/reviews', reviewsRoutes)
+app.use('/', usersRoutes);
+app.use('/campgrounds', campgroundsRoutes);
+app.use('/campgrounds/:id/reviews', reviewsRoutes);
+
+// app.get('/fakeUser', async (req, res, next) => {
+// 	const user = new User({email: 'fakeUser@gmail.com', username: 'faker'});
+// 	const newUser = await User.register(user, 'faky');
+// 	res.send(newUser);
+// })
 
 app.get('/', (req, res) => {
 	// res.send('Go YelpCamp!');

@@ -5,7 +5,7 @@ const User = require('../models/user');
 const passport = require('passport');
 
 const authenticateOptions = {
-	successRedirect: '/campgrounds',
+	// successRedirect: req.originalUrl || '/campgrounds',
 	failureRedirect: '/login',
 	failureFlash: true,
 	successFlash: 'Welcome Back!'
@@ -36,6 +36,9 @@ router.get('/login', (req, res) => {
 })
 
 router.post('/login', passport.authenticate('local', authenticateOptions), catchAsync(async(req, res) =>{
+	const intendedUrl = req.session.intendedUrl || '/campgrounds';
+	delete req.session.intendedUrl;
+	res.redirect(intendedUrl);
 }));
 
 router.get('/logout', (req, res, next)=> {

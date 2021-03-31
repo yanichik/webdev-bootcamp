@@ -5,6 +5,7 @@ const catchAsync = require('../utils/catchAsync');
 const {campgroundSchema} = require('../schemas');
 const ExpressError = require('../utils/ExpressError');
 const Campground = require('../models/campground');
+const isLoggedIn = require('../middleware');
 
 const validateCampground = (req, res, next) => {
 	const {error} = campgroundSchema.validate(req.body);
@@ -15,16 +16,18 @@ const validateCampground = (req, res, next) => {
 	next();
 }
 
-router.get('/', catchAsync(async (req, res, next) => {
+
+// USING this path starter for all paths in this doc: app.use('/campgrounds', campgroundsRoutes);
+router.get('/', isLoggedIn, catchAsync(async (req, res, next) => {
 	const campgrounds = await Campground.find({});
 	res.render('campgrounds/index', {campgrounds});
 }))
 
-router.get('/new', (req, res) => {
+router.get('/new', isLoggedIn, (req, res) => {
 	res.render('campgrounds/new');
 })
 
-router.post('/', validateCampground, catchAsync(async (req, res, next) => {
+router.post('/', isLoggedIn, validateCampground, catchAsync(async (req, res, next) => {
 	// Server-side validation OPTION 1: dataCheck.js - self-made
 	// dataCheck customizes responses depending on the missing data from the client
 	
@@ -39,7 +42,7 @@ router.post('/', validateCampground, catchAsync(async (req, res, next) => {
 	res.redirect(`campgrounds/${campground._id}`);
 }))
 
-router.get('/:id', catchAsync( async (req, res) => {
+router.get('/:id', isLoggedIn, catchAsync( async (req, res) => {
 	const campground = await Campground.findById(req.params.id).populate('reviews');
 	if (!campground) {
 		req.flash('error', `Cannot find campground "${req.params.id}"`);
@@ -48,7 +51,7 @@ router.get('/:id', catchAsync( async (req, res) => {
 	res.render('campgrounds/show', {campground});
 }))
 
-router.get('/:id/edit', async (req, res) => {
+router.get('/:id/edit', isLoggedIn, async (req, res) => {
 	const campground = await Campground.findById(req.params.id);
 	if (!campground) {
 		req.flash('error', `Cannot find campground "${req.params.id}"`);
@@ -57,7 +60,7 @@ router.get('/:id/edit', async (req, res) => {
 	res.render('campgrounds/edit', {campground});
 })
 
-router.put('/:id', validateCampground, async (req, res) => {
+router.put('/:id', isLoggedIn, validateCampground, async (req, res) => {
 	const {id} = req.params;
 	console.log(req.body);
 	// const {title, location} = req.body;
@@ -67,7 +70,7 @@ router.put('/:id', validateCampground, async (req, res) => {
 	res.redirect(`/campgrounds/${id}`);
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', isLoggedIn, async (req, res) => {
 	const {id} = req.params;
 	const deletedCampground = await Campground.findByIdAndDelete(id);
 	req.flash('success', `Successfully deleted campground "${deletedCampground.title}"`);

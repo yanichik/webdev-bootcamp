@@ -34,4 +34,5 @@ router.get('/login', (req, res) => {
 
 router.post('/login', passport.authenticate('local', authenticateOptions), catchAsync(async(req, res) =>{
 }));
+
 module.exports = router;

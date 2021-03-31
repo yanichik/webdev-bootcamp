@@ -18,7 +18,7 @@ const validateCampground = (req, res, next) => {
 
 
 // USING this path starter for all paths in this doc: app.use('/campgrounds', campgroundsRoutes);
-router.get('/', isLoggedIn, catchAsync(async (req, res, next) => {
+router.get('/', catchAsync(async (req, res, next) => {
 	const campgrounds = await Campground.find({});
 	res.render('campgrounds/index', {campgrounds});
 }))
@@ -42,7 +42,7 @@ router.post('/', isLoggedIn, validateCampground, catchAsync(async (req, res, nex
 	res.redirect(`campgrounds/${campground._id}`);
 }))
 
-router.get('/:id', isLoggedIn, catchAsync( async (req, res) => {
+router.get('/:id', catchAsync( async (req, res) => {
 	const campground = await Campground.findById(req.params.id).populate('reviews');
 	if (!campground) {
 		req.flash('error', `Cannot find campground "${req.params.id}"`);

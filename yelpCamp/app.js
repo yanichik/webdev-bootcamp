@@ -51,17 +51,21 @@ const sessionConfig = {
 }
 app.use(session(sessionConfig));
 app.use(flash());
-app.use( (req, res, next) => {
-	res.locals.success = req.flash('success');
-	res.locals.error = req.flash('error');
-	next();
-})
 
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new localStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+// define global values that are run at every request - have access to them inside static files
+app.use( (req, res, next) => {
+	// Passport creates req.user to hold logged-in user's info (id + username + email)
+	res.locals.loggedInUser = req.user;
+	res.locals.success = req.flash('success');
+	res.locals.error = req.flash('error');
+	next();
+})
 
 // app.use(morgan(':method :url :status :response-time ms'));
 app.use(express.urlencoded({extended: true}));

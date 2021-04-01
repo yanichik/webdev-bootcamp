@@ -63,6 +63,7 @@ app.use( (req, res, next) => {
 	// console.log(req.session);
 	// Passport creates req.user to hold logged-in user's info (id + username + email)
 	res.locals.loggedInUser = req.user;
+	console.log(req.user);
 	res.locals.success = req.flash('success');
 	res.locals.error = req.flash('error');
 	next();

@@ -11,6 +11,7 @@
 		  <ul class="list-group list-group-flush">
 		    <li class="list-group-item"><%= campground.description %></li>
 		    <li class="list-group-item">$<%= campground.price %>/night</li>
+		    <li class="list-group-item">Created By: <%= campground.author.username %></li>
 		  </ul>
 		  <div class="card-body d-flex d-row" style="justify-content: flex-start;">
 		    <a href="/campgrounds/<%= campground._id %>/edit" class="card-link btn btn-primary">Edit</a>
@@ -43,7 +44,7 @@
 		<div class="card mb-2">
 			<div class="card-text">
 				<h5>Rating: <%= review.rating %></h5>
-				<p>Review: <%= review.text %></p>
+				<p>Review: <%= review.text %> [Reviewed by: <%= review.author.username %>]</p>
 			</div>
 			<form class="d-inline" action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method=POST>
 				<button class="btn btn-danger" style="margin-left: 16px;">Delete</button>

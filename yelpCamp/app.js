@@ -60,7 +60,7 @@ passport.deserializeUser(User.deserializeUser());
 
 // define global values that are run at every request - have access to them inside static files
 app.use( (req, res, next) => {
-	console.log(req.session);
+	// console.log(req.session);
 	// Passport creates req.user to hold logged-in user's info (id + username + email)
 	res.locals.loggedInUser = req.user;
 	res.locals.success = req.flash('success');

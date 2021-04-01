@@ -36,14 +36,16 @@ router.post('/', isLoggedIn, validateCampground, catchAsync(async (req, res, nex
 	// Server-side validation OPTION 2: Joi API - via NPM
 	// see middleware inside the router.post call above (2nd parameter is the error middleware)
 
-	const campground = new Campground(req.body);
+	const campground = new Campground({...req.body, author: req.user._id});
 	await campground.save();
 	req.flash('success', 'Created a new Campground!');
 	res.redirect(`campgrounds/${campground._id}`);
 }))
 
 router.get('/:id', catchAsync( async (req, res) => {
-	const campground = await Campground.findById(req.params.id).populate('reviews');
+	const campground = await Campground.findById(req.params.id)
+		.populate({path: 'reviews', populate: {path: 'author'}})
+		.populate('author');
 	if (!campground) {
 		req.flash('error', `Cannot find campground "${req.params.id}"`);
 		return res.redirect('/campgrounds');
@@ -62,7 +64,7 @@ router.get('/:id/edit', isLoggedIn, async (req, res) => {
 
 router.put('/:id', isLoggedIn, validateCampground, async (req, res) => {
 	const {id} = req.params;
-	console.log(req.body);
+	// console.log(req.body);
 	// const {title, location} = req.body;
 	// const campground = await Campground.findByIdAndUpdate(id, {title: title, location: location}, {new: true});
 	const campground = await Campground.findByIdAndUpdate(id, req.body, {new: true});

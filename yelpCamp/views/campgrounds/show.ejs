@@ -52,11 +52,11 @@
 			<div class="card-text">
 				<p>Review: <%= review.text %></p>
 			</div>
-
+			<% if(loggedInUser && review.author.equals(loggedInUser)) {%>
 				<form class="d-inline" action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method=POST>
 					<button class="btn btn-danger" style="margin-left: 16px;">Delete</button>
 				</form>
-
+			<% } %>
 		</div>
 		<% } %>
 	</div>

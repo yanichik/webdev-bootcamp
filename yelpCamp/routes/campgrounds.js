@@ -2,22 +2,8 @@ const express = require('express')
 const router = express.Router();
 const cookieParser = require('cookie-parser');
 const catchAsync = require('../utils/catchAsync');
-const {campgroundSchema} = require('../schemas');
-const ExpressError = require('../utils/ExpressError');
 const Campground = require('../models/campground');
-const isLoggedIn = require('../middleware');
-const isAuthorLoggedIn = require('../middleware');
-
-// Validations defined & executed with Joi [separate from the campground schema defined in models]
-// Validations ONLY for PUT/POST requests -> need req.body to be passed in
-const validateCampground = (req, res, next) => {
-	const {error} = campgroundSchema.validate(req.body);
-	if (error) {
-		const msg = error.details.map(item => item.message).join(',');
-		throw new ExpressError(msg, 400);
-	}
-	next();
-}
+const {isLoggedIn, isAuthorLoggedIn, validateCampground} = require('../middleware');
 
 // USING this path starter for all paths in this doc: app.use('/campgrounds', campgroundsRoutes);
 router.get('/', catchAsync(async (req, res, next) => {
@@ -55,7 +41,7 @@ router.get('/:id', catchAsync( async (req, res) => {
 	res.render('campgrounds/show', {campground});
 }))
 
-router.get('/:id/edit', isLoggedIn, isAuthorLoggedIn,catchAsync(async (req, res) => {
+router.get('/:id/edit', isLoggedIn, isAuthorLoggedIn, catchAsync(async (req, res) => {
 	const campground = await Campground.findById(req.params.id);
 	if (!campground) {
 		req.flash('error', `Cannot find campground "${req.params.id}"`);

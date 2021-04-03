@@ -7,16 +7,7 @@ const {campgroundSchema, reviewSchema} = require('../schemas');
 const Campground = require('../models/campground');
 const Review = require('../models/reviews');
 const User = require('../models/user')
-const isLoggedIn = require('../middleware');
-
-const validateReview = (req, res, next) => {
-	const {error} = reviewSchema.validate(req.body);
-	if (error) {
-		const msg = error.details.map(item => item.message).join(',');
-		throw new ExpressError(msg, 400);
-	}
-	next();
-}
+const {isLoggedIn, isReviewAuthor, validateReview} = require('../middleware');
 
 // Route template:
 // /campgrounds/:id/reviews
@@ -43,7 +34,7 @@ router.put('/', isLoggedIn, validateReview, catchAsync( async(req, res, next) =>
 	res.redirect(`/campgrounds/${req.params.id}`);
 }))
 
-router.delete('/:reviewId', isLoggedIn, catchAsync(async (req, res) => {
+router.delete('/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(async (req, res) => {
 	const {id, reviewId} = req.params;
 	await Campground.findByIdAndUpdate(id, {
 		$pull: {
@@ -51,6 +42,7 @@ router.delete('/:reviewId', isLoggedIn, catchAsync(async (req, res) => {
 		}
 	});
 	await Review.findByIdAndDelete(reviewId);
+	req.flash('success', 'Review deleted successfully');
 	res.redirect(`/campgrounds/${id}`);
 }))
 

@@ -26,32 +26,37 @@
 		</div>	
 	</div>
 	<div class="col-6">
-		<h2>Leave a Review</h2>
-		<form action="/campgrounds/<%=campground._id%>/reviews?_method=PUT" method=POST novalidate class="needs-validation">
-			<!-- <label class="form-label" for="rating"></label> -->
-			<div class="mt-5">
-				<label class="form-label" for="rating">Rate Me:</label>
-				<input type="range" id="rating" min="1" value="5" max="5" name="reviews[rating]" oninput="this.nextElementSibling.value = this.value">
-				<output>5</output>
-			</div>
-			<div style="margin-top: -25px;">
-				<label class="form-label" for="text"></label>
-				<textarea class="form-control" id="text" name="reviews[text]" required></textarea>
-				<div class="valid-feedback">
-					Great!
+		<% if(loggedInUser) {%>
+			<h2>Leave a Review</h2>
+			<form action="/campgrounds/<%=campground._id%>/reviews?_method=PUT" method=POST novalidate class="needs-validation">
+				<!-- <label class="form-label" for="rating"></label> -->
+				<div class="mt-5">
+					<label class="form-label" for="rating">Rate Me:</label>
+					<input type="range" id="rating" min="1" value="5" max="5" name="reviews[rating]" oninput="this.nextElementSibling.value = this.value">
+					<output>5</output>
 				</div>
-				<button class="btn btn-success mt-2 mb-5">Submit</button>
-			</div>
-		</form>
+				<div style="margin-top: -25px;">
+					<label class="form-label" for="text"></label>
+					<textarea class="form-control" id="text" name="reviews[text]" required></textarea>
+					<div class="valid-feedback">
+						Great!
+					</div>
+					<button class="btn btn-success mt-2 mb-5">Submit</button>
+				</div>
+			</form>
+		<% } %>
 		<% for(let review of campground.reviews) {%>
 		<div class="card mb-2">
+			<h5 class="card-title">Rating: <%= review.rating %></h5>
+			<h6 class="card-subtitle mb-2 text-muted">By <%= review.author.username %></h6>
 			<div class="card-text">
-				<h5>Rating: <%= review.rating %></h5>
-				<p>Review: <%= review.text %> [Reviewed by: <%= review.author.username %>]</p>
+				<p>Review: <%= review.text %></p>
 			</div>
-			<form class="d-inline" action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method=POST>
-				<button class="btn btn-danger" style="margin-left: 16px;">Delete</button>
-			</form>
+
+				<form class="d-inline" action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method=POST>
+					<button class="btn btn-danger" style="margin-left: 16px;">Delete</button>
+				</form>
+
 		</div>
 		<% } %>
 	</div>

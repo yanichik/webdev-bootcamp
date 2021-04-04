@@ -35,7 +35,7 @@ module.exports.isAuthorLoggedIn = catchAsync( async(req, res, next) =>{
 module.exports.isReviewAuthor = catchAsync( async(req, res, next) =>{
 	const {id, reviewId} = req.params;
 	const review = await Review.findById(reviewId);
-	console.log(review);
+	// console.log(review);
 	if(!review) {
 		req.flash('error', 'Cannot delete a non-existing review.');
 		return res.redirect(`/campgrounds/${id}`);

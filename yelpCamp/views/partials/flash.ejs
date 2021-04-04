@@ -1,17 +1,21 @@
 <% if(success.length) {%>
-	<div class="alert alert-success alert-dismissible fade show" role="alert">
-		<strong><%=success%></strong>
-		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-  			<!-- <span aria-hidden="true">&times;</span> -->
-		</button>
-	</div>
+	<% for (let i = 0; i < success.length; i++) {%>
+		<div class="alert alert-success alert-dismissible fade show" role="alert">
+			<strong><%=success[i]%></strong>
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+	  			<!-- <span aria-hidden="true">&times;</span> -->
+			</button>
+		</div>
+	<% } %>
 <% } %>
 
 <% if(error.length) {%>
-	<div class="alert alert-danger alert-dismissible fade show" role="alert">
-		<strong><%=error%></strong>
-		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-  			<!-- <span aria-hidden="true">&times;</span> -->
-		</button>
-	</div>
+	<% for (let i = 0; i < error.length; i++) {%>
+		<div class="alert alert-danger alert-dismissible fade show" role="alert">
+			<strong><%=error[i]%></strong>
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+	  			<!-- <span aria-hidden="true">&times;</span> -->
+			</button>
+		</div>
+	<%}%>
 <% } %>

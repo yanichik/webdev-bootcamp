@@ -4,68 +4,21 @@ const cookieParser = require('cookie-parser');
 const catchAsync = require('../utils/catchAsync');
 const Campground = require('../models/campground');
 const {isLoggedIn, isAuthorLoggedIn, validateCampground} = require('../middleware');
+const campController = require('../controllers/campController');
 
 // USING this path starter for all paths in this doc: app.use('/campgrounds', campgroundsRoutes);
-router.get('/', catchAsync(async (req, res, next) => {
-	const campgrounds = await Campground.find({});
-	res.render('campgrounds/index', {campgrounds});
-}))
+router.route('/')
+	.get(catchAsync(campController.renderIndex))
+	.post(isLoggedIn, validateCampground, catchAsync(campController.createNewCamp));
 
-router.get('/new', isLoggedIn, (req, res) => {
-	res.render('campgrounds/new');
-})
+router.get('/new', isLoggedIn, campController.renderNewForm);
 
-router.post('/', isLoggedIn, validateCampground, catchAsync(async (req, res, next) => {
-	// Server-side validation OPTION 1: dataCheck.js - self-made
-	// dataCheck customizes responses depending on the missing data from the client
-	
-	// dataCheck(req.body);
+router.route('/:id')
+	.get(catchAsync(campController.showCamp))
+	.put(isLoggedIn, validateCampground, catchAsync(campController.editCamp))
+	.delete(isLoggedIn, catchAsync(campController.deleteCamp));
 
-	// Server-side validation OPTION 2: Joi API - via NPM
-	// see middleware inside the router.post call above (2nd parameter is the error middleware)
-
-	const campground = new Campground({...req.body, author: req.user._id});
-	await campground.save();
-	req.flash('success', 'Created a new Campground!');
-	res.redirect(`campgrounds/${campground._id}`);
-}))
-
-router.get('/:id', catchAsync( async (req, res) => {
-	const campground = await Campground.findById(req.params.id)
-		.populate({path: 'reviews', populate: {path: 'author'}})
-		.populate('author');
-	if (!campground) {
-		req.flash('error', `Cannot find campground "${req.params.id}"`);
-		return res.redirect('/campgrounds');
-	}
-	res.render('campgrounds/show', {campground});
-}))
-
-router.get('/:id/edit', isLoggedIn, isAuthorLoggedIn, catchAsync(async (req, res) => {
-	const campground = await Campground.findById(req.params.id);
-	if (!campground) {
-		req.flash('error', `Cannot find campground "${req.params.id}"`);
-		return res.redirect('/campgrounds');
-	}
-	res.render('campgrounds/edit', {campground});
-}))
-
-router.put('/:id', isLoggedIn, validateCampground, async (req, res) => {
-	const {id} = req.params;
-	// console.log(req.body);
-	// const {title, location} = req.body;
-	// const campground = await Campground.findByIdAndUpdate(id, {title: title, location: location}, {new: true});
-	const campground = await Campground.findByIdAndUpdate(id, req.body, {new: true});
-	req.flash('success', `Successfully edited campground "${campground.title}"`);
-	res.redirect(`/campgrounds/${id}`);
-})
-
-router.delete('/:id', isLoggedIn, async (req, res) => {
-	const {id} = req.params;
-	const deletedCampground = await Campground.findByIdAndDelete(id);
-	req.flash('success', `Successfully deleted campground "${deletedCampground.title}"`);
-	res.redirect(`/campgrounds`);
-})
+router.get('/:id/edit', isLoggedIn, isAuthorLoggedIn, catchAsync(campController.renderEditForm));
 
 module.exports = router;
 

@@ -4,7 +4,7 @@
 		<h1 class="text-center">Create New Campground</h1>
 		<!-- <div class="col-6  offset-3" style="border-color: green; border-style: solid;"> -->
 		<div class="col-6  offset-3">
-			<form action="/campgrounds" method="POST" novalidate class="needs-validation">
+			<form action="/campgrounds" method="POST" novalidate class="needs-validation" enctype="multipart/form-data">
 				<!-- <div class="mb-3" style="border-color: blue; border-style: solid;"> -->
 				<div class="mb-3">
 					<label class="form-label" for="title">Campground Name:</label>
@@ -37,8 +37,10 @@
 					</div>
 				</div>
 				<div class="mb-3">
-					<label class="form-label" for="image">Image URL:</label>
-					<input class="form-control" type="text" id="image" name="image" required>
+					<!-- <label class="form-label" for="image">Image URL:</label> -->
+					<!-- <input class="form-control" type="text" id="image" name="image" required> -->
+					<label class="form-label" for="image">Upload Image:</label>
+					<input class="form-control" type="file" id="image" name="image" multiple>
 				</div>
 				<button class="btn btn-primary">Submit</button>
 				<a class="btn btn-danger" href="/campgrounds">Cancel</a>

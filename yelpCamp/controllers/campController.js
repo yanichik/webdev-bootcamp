@@ -17,8 +17,11 @@ module.exports.createNewCamp = async (req, res, next) => {
 
 	// Server-side validation OPTION 2: Joi API - via NPM
 	// see middleware inside the router.post call above (2nd parameter is the error middleware)
-
-	const campground = new Campground({...req.body, author: req.user._id});
+	// console.log("req.body:\n", req.body);
+	// console.log("req.files:\n", req.files);
+	const campground = new Campground({	...req.body, author: req.user._id});
+	campground.images = req.files.map(f => ({path: f.path, filename: f.filename}) );
+	// console.log("images", campground.images);
 	await campground.save();
 	req.flash('success', 'Created a new Campground!');
 	res.redirect(`campgrounds/${campground._id}`);

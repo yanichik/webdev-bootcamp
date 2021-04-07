@@ -3,6 +3,9 @@ const Review = require('./models/reviews');
 const catchAsync = require('./utils/catchAsync');
 const {campgroundSchema, reviewSchema} = require('./schemas');
 const ExpressError = require('./utils/ExpressError');
+const multer = require('multer');
+const {storage} = require('./cloudinary');
+const upload = multer({storage});
 
 module.exports.isLoggedIn = (req, res, next) =>{
 	if(!req.isAuthenticated()){
@@ -50,7 +53,9 @@ module.exports.isReviewAuthor = catchAsync( async(req, res, next) =>{
 // Validations defined & executed with Joi [separate from the campground schema defined in models]
 // Validations ONLY for PUT/POST requests -> need req.body to be passed in
 module.exports.validateCampground = (req, res, next) => {
+	// console.log(req.body);
 	const {error} = campgroundSchema.validate(req.body);
+	// console.log(error);
 	if (error) {
 		const msg = error.details.map(item => item.message).join(',');
 		throw new ExpressError(msg, 400);

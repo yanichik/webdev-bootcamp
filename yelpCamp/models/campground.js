@@ -5,7 +5,12 @@ const User = require('./user')
 
 const campSchema = new Schema({
 	title: String,
-	image: String,
+	images: [
+		{
+		path: String,
+		filename: String
+		}
+	],
 	price: Number,
 	description: String,
 	location: String,

@@ -4,7 +4,11 @@
 <div class="row">
 	<div class="col-6">
 		<div class="card">
-		  <img src="<%= campground.image %>" class="card-img-top" alt="" style="max-height: 500px; max-width: 100%; object-fit: scale-down;">
+		  <% for (let img of campground.images) {%>
+		  
+		  	<%= console.log(img);%>
+		  	<img src="<%= img.path %>" class="card-img-top" alt="" style="max-height: 500px; max-width: 100%; object-fit: scale-down;">
+		  <% } %>
 		  <div class="card-body">
 		    <h1 class="card-title"><span style="font-weight: bold;"><%= campground.title %></span></h1>
 		    <p class="card-text text-muted"><%= campground.location %></p>

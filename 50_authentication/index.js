@@ -55,20 +55,12 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
 	const {username, password} = req.body;
-	const user = await User.findOne({username});
-	if (user) {
-		const valid = await bcrypt.compare(password, user.hashedPw);
-		if (valid) {
-			req.session.user_id = user._id;
-			res.send("Congrats, you're in!");
-		}
-		else {
-			res.send("Incorrect. Try again.");
-		}
+	const isValid = await User.findAndValidate(username, password, req);
+	if (isValid) {
+		// return res.send("Congrats, you're in!");
+		return res.redirect('/secret');
 	}
-	else {
-		res.send("Incorrect. Try again.");
-	}
+	res.send("Incorrect. Try again.");
 })
 
 app.get('/secret', requireLogin, (req, res) =>{

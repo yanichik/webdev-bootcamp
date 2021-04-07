@@ -21,4 +21,14 @@ userSchema.pre('save', async function(next){
 
 })
 
+userSchema.statics.findAndValidate = async function(username, password, req){
+	const user = await this.findOne({username});
+	const isValid = await bcrypt.compare(password, user.hashedPw);
+	if (isValid) {
+		req.session.user_id = user._id;
+		return user;
+	}
+	return false;
+}
+
 module.exports = mongoose.model('User', userSchema);

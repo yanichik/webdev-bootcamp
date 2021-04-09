@@ -1,5 +1,9 @@
 const Campground = require('../models/campground');
 const {cloudinary} = require('../cloudinary');
+const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
+const mbxToken = process.env.MAPBOX_TOKEN;
+
+const geocoder = mbxGeocoding({accessToken: mbxToken})
 
 module.exports.renderIndex = async (req, res, next) => {
 	const campgrounds = await Campground.find({});
@@ -18,14 +22,20 @@ module.exports.createNewCamp = async (req, res, next) => {
 
 	// Server-side validation OPTION 2: Joi API - via NPM
 	// see middleware inside the router.post call above (2nd parameter is the error middleware)
-	// console.log("req.body:\n", req.body);
-	// console.log("req.files:\n", req.files);
-	const campground = new Campground({	...req.body, author: req.user._id});
-	campground.images = req.files.map(f => ({path: f.path, filename: f.filename}) );
-	console.log("images", campground.images);
-	await campground.save();
-	req.flash('success', 'Created a new Campground!');
-	res.redirect(`campgrounds/${campground._id}`);
+
+	const geoResult = await geocoder.forwardGeocode({
+		query: req.body.location,
+		limit: 1
+	}).send();
+
+	console.log(geoResult.body.features[0].geometry.coordinates);
+	res.send('Sent!');
+	// const campground = new Campground({	...req.body, author: req.user._id});
+	// campground.images = req.files.map(f => ({path: f.path, filename: f.filename}) );
+	// console.log("images", campground.images);
+	// await campground.save();
+	// req.flash('success', 'Created a new Campground!');
+	// res.redirect(`campgrounds/${campground._id}`);
 }
 
 module.exports.showCamp = async (req, res) => {

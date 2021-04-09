@@ -3,14 +3,18 @@ const {Schema} = mongoose;
 const Review = require('./reviews')
 const User = require('./user')
 
+const imageSchema = new Schema({
+	path: String,
+	filename: String
+})
+
+imageSchema.virtual('thumb').get(function(){
+	return this.path.replace('/upload', '/upload/w_250,h_250');
+})
+
 const campSchema = new Schema({
 	title: String,
-	images: [
-		{
-		path: String,
-		filename: String
-		}
-	],
+	images: [imageSchema],
 	price: Number,
 	description: String,
 	location: String,

@@ -5,7 +5,7 @@
 
 // Fetch all the forms we want to apply custom Bootstrap validation styles to
 const forms = document.querySelectorAll('.needs-validation')
-console.log(forms);
+// console.log(forms);
 
 // Loop over them and prevent submission
 // Array.prototype.slice.call(forms) -> old way of making an array out of an array-like item

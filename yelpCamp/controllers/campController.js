@@ -28,14 +28,13 @@ module.exports.createNewCamp = async (req, res, next) => {
 		limit: 1
 	}).send();
 
-	console.log(geoResult.body.features[0].geometry.coordinates);
-	res.send('Sent!');
-	// const campground = new Campground({	...req.body, author: req.user._id});
-	// campground.images = req.files.map(f => ({path: f.path, filename: f.filename}) );
-	// console.log("images", campground.images);
-	// await campground.save();
-	// req.flash('success', 'Created a new Campground!');
-	// res.redirect(`campgrounds/${campground._id}`);
+	const campground = new Campground({	...req.body, author: req.user._id});
+	campground.images = req.files.map(f => ({path: f.path, filename: f.filename}) );
+	campground.geometry = geoResult.body.features[0].geometry;
+	console.log(campground.geometry);
+	await campground.save();
+	req.flash('success', 'Created a new Campground!');
+	res.redirect(`campgrounds/${campground._id}`);
 }
 
 module.exports.showCamp = async (req, res) => {

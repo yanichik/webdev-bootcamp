@@ -1,11 +1,11 @@
 <% layout('layouts/boilerplate') %>
 	<%- include('../partials/flash') %> <!-- relative path -->
+
+	<div id="map" class="mb-3" style="width: 100%; height: 350px;"></div>
 	<h1>All Campgrounds</h1>
 	<div>
 		<a href="/campgrounds/new">Create New</a>
 	</div>
-
-
 	<% for (var campground of campgrounds) { -%>
 		<div class="card mb-3" style="max-height:350px;">
 			<div class="row">
@@ -23,8 +23,11 @@
 			</div>	
 		</div>
 	<% } -%>
-
-
+<script>
+	const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
+	const campgrounds = {features: <%- JSON.stringify(campgrounds) %>};
+</script>
+<script src="/javascripts/clusterMap.js"></script>
 	<!-- <ul>
 	<% for (var campground of campgrounds) { -%>
 		<li><a href="/campgrounds/<%= campground._id %>"><%= campground.title %></a></li>

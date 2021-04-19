@@ -26,6 +26,7 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const localStrategy = require('passport-local');
 const User = require('./models/user');
+const mongoSanitize = require('express-mongo-sanitize');
 
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {
@@ -81,6 +82,7 @@ app.use(express.urlencoded({extended: true}));
 // override with POST having ?_method=DELETE or ?_method=PUT
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(mongoSanitize());
 
 // routes middleware: location MUST BE AFTER all of the other required middleware for the routes to function
 app.use('/', usersRoutes);

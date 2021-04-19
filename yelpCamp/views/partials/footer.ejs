@@ -1,5 +1,9 @@
-<footer class="footer bg-primary py-3 mt-auto">
-	<div class="container">
-		<span class="text-white-50">&copy; YelpCamp 2021</span>
+<% if(url === '/') {%>
+<footer class="footer py-3 mt-auto">
+<%} else {%>
+<footer class="footer bg-dark py-3 mt-auto">
+<%}%>
+	<div class="container-fluid">
+		<span class="text-white">&copy; YelpCamp 2021</span>
 	</div>
 </footer>

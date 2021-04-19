@@ -1,0 +1,10 @@
+  .nav-link, .navbar-brand {
+  padding: 0.25rem 0;
+  margin-left: 1rem;
+  font-weight: 700;
+  border-bottom: solid .25rem transparent;
+}
+
+  .nav-link:hover{
+  border-bottom: solid .25rem #fff;
+}

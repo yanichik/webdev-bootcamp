@@ -1,0 +1,12 @@
+body {
+	background-image: linear-gradient(rgba(0,0,0, 0.6), rgba(0,0,0, 0.6)), 
+		url("https://images.unsplash.com/photo-1528736729994-b43efc2bcf2b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2467&q=80");
+	background-position: center;
+	/*border: solid red 3px;*/
+}
+main {
+	/*border: solid red 5px;*/
+	height: 100%;
+	display: flex;
+	align-items: center;
+}

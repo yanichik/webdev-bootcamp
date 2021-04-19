@@ -6,7 +6,9 @@
 		  <h4 class="alert-heading"><%= err.message %></h4>
 		  <!-- <p><%= err.stack.slice(0,5) + err.stack.slice(err.message.length+10) + ': '%></p> -->
 		  <!-- <p><%= err.stack.slice(err.message.length) %></p> -->
-		  <p><%= err.stack %></p>
+		  <% if(process.env.NODE_ENV !== 'production') {%>
+		  	<p><%= err.stack %></p>
+		  <%}%>
 		  <hr>
 		  <p class="mb-0"></p>
 		</div>

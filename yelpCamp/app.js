@@ -32,7 +32,9 @@ const User = require('./models/user');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
 
-mongoose.connect('mongodb://localhost:27017/yelp-camp', {
+// const dbURL = process.env.ATLAS_URL;
+const dbURL = 'mongodb://localhost:27017/yelp-camp';
+mongoose.connect(dbURL, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
 	useCreateIndex: true,
